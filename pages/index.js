@@ -4,7 +4,6 @@ import { Container, Row, Col, Image, Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faTrashCan, faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import { getCookie } from 'cookies-next';
-import axios from 'axios';
 
 const PredictPage = () => {
     const router = useRouter();
