@@ -28,8 +28,9 @@ const Bottom_Navbar = () => {
                 { (auth.user) &&
                     <Nav className="me-auto">
                         <Nav.Link><Link href="/history">History</Link></Nav.Link>
-                        <Nav.Link><Link href="/profile">Profile</Link></Nav.Link>
+                        <Nav.Link><Link href="/predict">Predict</Link></Nav.Link>
                         <Nav.Link><Link href="/chat">Chat</Link></Nav.Link>
+                        <Nav.Link><Link href="/profile">Profile</Link></Nav.Link>
                     </Nav>
                 }
             </Navbar.Collapse>
