@@ -1,55 +1,45 @@
-import Head from 'next/head';
 import React from 'react';
 import { Container, Row, Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
-// import BloodCell from "../../public/blood_cell.png"
+import { getCookie } from 'cookies-next';
 
 const History = () => {
     const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    
 
-    const history_data = [
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Anemia'
-        },
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Non Anemia'
-        },
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Anemia'
-        },
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Non Anemia'
-        },
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Anemia'
-        },
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Non Anemia'
-        },
-                {
-            'Date':'2023-12-18',
-            'Result' : 'Anemia'
-        },
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Non Anemia'
-        },
-    ]
+    const [historyData, setHistoryData] = useState([])
+
+    useEffect(() => {
+        fetch(`${process.env.API_URL}/predictionsByUID`, {
+            headers: {
+                'Authorization': getCookie('token'),
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            if (res.status === 401) {
+                router.push('/login');
+            }
+            else {
+                alert('Error fetching profile');
+            }
+        }).then((data) => {
+            setHistoryData(data)
+        }
+        );
+    }, []);
+
 
     const formatDate = (dateString) =>{
-        const date = new Date(dateString);
-        const options = { day: 'numeric', month: 'short', year: 'numeric' };
-        const formattedDate = date.toLocaleDateString('en-US', options);
+        const dateObj = new Date(dateString);
+
+        const day = dateObj.getUTCDate().toString().padStart(2, '0');
+        const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0');
+        const year = dateObj.getUTCFullYear();
+
+        const formattedDate = `${day}-${month}-${year}`;
 
         return formattedDate;
     }
@@ -63,7 +53,7 @@ const History = () => {
                     className='mb-4 mt-2'
                 >History</h3>
 
-                {history_data.map((entry, index) => (
+                {historyData.map((entry, index) => (
                     <div key={index} 
                         className="d-flex history-card"
                         onClick={() => router.push('/history/detail')}
@@ -74,7 +64,12 @@ const History = () => {
                                 maxWidth:"70px"
                             }}
                         >
-                            Image
+                            <img src={entry.photoUrl} 
+                                style={{
+                                    width:"100%",
+                                    borderRadius:"10px"
+                                }}
+                            />
                         </div>
                         <div style={{
                             marginTop:'auto',
@@ -85,8 +80,8 @@ const History = () => {
                                     fontSize:"18px",
                                     fontWeight:"600"
                                 }}
-                            >{formatDate(entry.Date)}</p>
-                            <p className='mt-0 mb-0'>Prediciton : {entry.Result}</p>
+                            >{formatDate(entry.date)}</p>
+                            <p className='mt-0 mb-0'>Prediciton : {entry.result}</p>
                         </div>
                     </div>
                 ))}
