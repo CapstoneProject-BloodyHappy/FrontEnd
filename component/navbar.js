@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 const Bottom_Navbar = (props) => {
     const auth = useAuth();
-    const [userData, setUserData] = React.useState(null);
+    const [userData, setUserData] = useState([]);
 
     useEffect(() => {
         if (props.userdata) {

@@ -4,10 +4,18 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { getCookie } from 'cookies-next';
 
-const Detail = () => {
+const Detail = (props) => {
     const router = useRouter();
     const { id } = router.query;
     const [details, setDetails] = useState([]);
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        if (props.userdata) {
+            setUserData(props.userdata);
+            console.log(props.userdata);
+        }
+    }, [props.userdata]);
 
     const user_data =
         {
@@ -31,25 +39,27 @@ const Detail = () => {
     }
 
     useEffect(() => {
-        fetch(`${process.env.API_URL}/predict/${id}`, {
-            headers: {
-                'Authorization': getCookie('token'),
+        if (id) {
+            fetch(`${process.env.API_URL}/predict/${id}`, {
+                headers: {
+                    'Authorization': getCookie('token'),
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+                if (res.status === 401) {
+                    router.push('/login');
+                }
+                else {
+                    alert('Error fetching profile');
+                }
+            }).then((data) => {
+                setDetails(data)
             }
-        }).then((res) => {
-            if (res.status === 200) {
-                return res.json();
-            }
-            if (res.status === 401) {
-                router.push('/login');
-            }
-            else {
-                alert('Error fetching profile');
-            }
-        }).then((data) => {
-            setDetails(data)
+            );
         }
-        );
-    }, []);
+    }, [id]);
     return (
         <Container className="mt-3">
             <div className="d-flex">
@@ -124,15 +134,15 @@ const Detail = () => {
                             <ul>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Name</span>
-                                : {user_data.Name}
+                                : {userData.name}
                             </li>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Age</span>
-                                : {user_data.Age}
+                                : {userData.age}
                             </li>
                             <li>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Sex</span>
-                                : {user_data.Sex}
+                                : {userData.sex}
                             </li>
                             </ul>
 
