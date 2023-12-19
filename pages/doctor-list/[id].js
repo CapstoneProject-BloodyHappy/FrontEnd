@@ -3,30 +3,56 @@ import { useRouter } from 'next/router'
 import { Container, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight} from '@fortawesome/free-solid-svg-icons';
+import { getCookie } from 'cookies-next';
 
 const DoctorListPage = (props) => {
+    const [doctorList, setDoctorList] = useState([])
 
     const router = useRouter();
     const { id } = router.query;
 
-    const doctor = [
-        {
-            name: "Dr. Arik Rayi",
-            hospital: "Primaya Bekasi"
-        },
-        {
-            name: "Dr. Arik Rayi",
-            hospital: "Primaya Bekasi"
-        },
-        {
-            name: "Dr. Arik Rayi",
-            hospital: "Primaya Bekasi"
-        },
-        {
-            name: "Dr. Arik Rayi",
-            hospital: "Primaya Bekasi"
-        }
-    ]
+    useEffect(() => {
+        fetch(`${[process.env.API_URL]}/doctors`, {
+            headers: {
+                Authorization: getCookie('token')
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                alert('Something went wrong')
+            }
+        }).then((data) => {
+            console.log(data)
+            setDoctorList(data)
+        }).catch((err) => {
+            console.log(err)
+            alert('Something went wrong')
+        })
+    }, [])
+
+    const makeAppointment = (doctorId) => {
+        fetch(`${[process.env.API_URL]}/appointments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: getCookie('token')
+            },
+            body: JSON.stringify({
+                doctorUid: doctorId,
+                predictionid: id
+            })
+        }).then((res) => {
+            if (res.status === 200) {
+                router.push('/appoinment')
+            } else {
+                alert('Something went wrong')
+            }
+        }).catch((err) => {
+            console.log(err)
+            alert('Something went wrong')
+        })
+    }
 
     return (
         <Container className='doctor-container'>
@@ -36,7 +62,7 @@ const DoctorListPage = (props) => {
             }}
                 className='mb-4 mt-4'
             >Create An Appoinment</h4>
-                {doctor.map((entry, index) => (
+                {doctorList.map((entry, index) => (
                     <div>
                         <div key={index}
                             className="d-flex docter-card"
@@ -49,7 +75,7 @@ const DoctorListPage = (props) => {
                                     marginRight: '10px'
                                 }}
                             >
-                                <img src="default-avatar.jpg"
+                                <img src="/default-avatar.jpg"
                                     style={{
                                         width:"100%",
                                         height:"100%",
@@ -77,6 +103,7 @@ const DoctorListPage = (props) => {
                                         border: '1px solid #DC2228',
                                         maxWidth:'250px'
                                     }}
+                                    onClick={() => makeAppointment(entry.uid)}
                                     >Create Appoinment <FontAwesomeIcon icon={faArrowRight} style={{color: "white",width:"15px", height:"15px", marginLeft:'2px'}}/></Button>
                             </div>
                         </div>

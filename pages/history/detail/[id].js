@@ -16,15 +16,6 @@ const Detail = (props) => {
         }
     }, [props.userdata]);
 
-    const user_data =
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Anemia',
-            'Name' : 'Arik Rayi',
-            'Age' : 20,
-            'Sex': 'male'
-        }
-
     const formatDate = (dateString) =>{
         const dateObj = new Date(dateString);
 
@@ -59,6 +50,7 @@ const Detail = (props) => {
             );
         }
     }, [id]);
+
     return (
         <Container className="mt-3">
             <div className="d-flex">
@@ -73,7 +65,6 @@ const Detail = (props) => {
                         className='mb-5'
                     >{formatDate(details.date)}</h3>
                 </div>
-
                 <div
                     style={{ 
                         marginBottom: '20px',
@@ -152,7 +143,7 @@ const Detail = (props) => {
                                 }}
                                 className='mt-3'
                             >
-                                Identifikasi Pasien
+                                Prediksi
                             </p>
                             <p
                                 className='mt-1'

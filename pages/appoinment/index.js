@@ -3,26 +3,31 @@ import { useRouter } from 'next/router'
 import { Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faClock, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
+import { getCookie } from 'cookies-next';
 
 const Appointment = (props) => {
+    const router = useRouter()
+    const [appointmentList, setAppointmentList] = useState([])
 
-    const appointment_list = [
-        {
-            name: "Dr. Arik Rayi",
-            hospital: "Primaya Bekasi",
-			status: 'rejected'
-        },
-        {
-            name: "Dr. Arik Rayi",
-            hospital: "Primaya Bekasi",
-			status: 'accepted'
-        },
-        {
-            name: "Dr. Arik Rayi",
-            hospital: "Primaya Bekasi",
-			status: 'pending'
-        },
-    ]
+    useEffect(() => {
+        fetch(`${[process.env.API_URL]}/appointments`, {
+            headers: {
+                Authorization: getCookie('token')
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                alert('Something went wrong')
+            }
+        }).then((data) => {
+            setAppointmentList(data)
+        }
+        ).catch((err) => {
+            console.log(err)
+            alert('Something went wrong')
+        })
+    }, [])
 
 	return (
         <Container className='doctor-container'>
@@ -32,7 +37,7 @@ const Appointment = (props) => {
             }}
                 className='mb-4 mt-4'
             >Appointment List</h4>
-                {appointment_list.map((entry, index) => (
+                {appointmentList.map((entry, index) => (
                     <div>
                         <div key={index}
                             className="d-flex docter-card"
@@ -63,8 +68,8 @@ const Appointment = (props) => {
                                             fontSize:"18px",
                                             fontWeight:"600"
                                         }}
-                                    >{entry.name}</p>
-                                    <p className='mt-0 mb-0'>{entry.hospital}</p>
+                                    >{entry.doctor.name}</p>
+                                    <p className='mt-0 mb-0'>{entry.doctor.hospital}</p>
                                 </div>
 								<div className='d-flex mt-1 align-items-center'
 									style={{
@@ -72,13 +77,13 @@ const Appointment = (props) => {
 									}}
 								>
 									{
-										entry.status == "pending" ?
+										entry.appointment.status === "pending" ?
 										<FontAwesomeIcon icon={faClock} style={{color: "#caca00",}} /> :
-											entry.status == "accepted" ?
+											entry.appointment.status === "accepted" ?
 											<FontAwesomeIcon icon={faCheck} style={{color: "#00ff40",}} /> :
 											<FontAwesomeIcon icon={faCircleXmark} style={{color: "#ff0000",}} />
 									}
-									<p className='mt-0 mb-0 ms-1'>{entry.status}</p>
+									<p className='mt-0 mb-0 ms-1'>{entry.appointment.status}</p>
 								</div>
                             </div>
                         </div>

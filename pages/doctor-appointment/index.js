@@ -1,36 +1,82 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import { Container, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight} from '@fortawesome/free-solid-svg-icons';
-
-const appoinment_list = [
-    {
-        name: "Arik",
-        age: 18,
-        sex: "Male",
-        status: 'rejected',
-        predictionId : "adwadawd"
-    },
-    {
-        name: "Arik",
-        age: 18,
-        sex: "Male",
-        status: 'accepted',
-        predictionId : "adwadawd"
-    },
-    {
-        name: "Arik",
-        age: 18,
-        sex: "Male",
-        status: 'pending',
-        predictionId : "adwadawd"
-    },
-]
+import { getCookie } from 'cookies-next';
 
 const DoctorAppointment = () => {
-
     const router = useRouter();
+    const [appoinmentList, setAppoinmentList] = useState([])
+
+    const acceptAppointment = (e, id) => {
+        fetch(`${process.env.API_URL}/appointments`, {
+            method: 'PATCH',
+            headers: {
+                Authorization: getCookie('token'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                consultationid: id,
+                status: 'accepted',
+            }),
+        }).then((res) => {
+            if (res.status === 200) {
+                alert('Appointment accepted');
+                return;
+            } else {
+                alert('Something went wrong');
+            }
+        }).catch((err) => {
+            console.log(err);
+            alert('Something went wrong');
+        });
+    }
+
+    const rejectAppointment = (e, id) => {
+        fetch(`${process.env.API_URL}/appointments`, {
+            method: 'PATCH',
+            headers: {
+                Authorization: getCookie('token'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                consultationid: id,
+                status: 'rejected',
+            }),
+        }).then((res) => {
+            if (res.status === 200) {
+                alert('Appointment rejected');
+            } else {
+                alert('Something went wrong');
+            }
+        }).catch((err) => {
+            console.log(err);
+            alert('Something went wrong');
+        });
+    }
+
+    useEffect(() => {
+        fetch(`${process.env.API_URL}/appointments`, {
+            headers: {
+                Authorization: getCookie('token'),
+            },
+        }).then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            } else {
+                alert('Something went wrong');
+            }
+        }).then((data) => {
+            if (data) {
+                setAppoinmentList(data);
+            }
+        }).catch((err) => {
+            console.log(err);
+            alert('Something went wrong');
+        }
+        );
+    }
+    , []);
+
 
 	return (
         <Container className='doctor-container'>
@@ -40,10 +86,10 @@ const DoctorAppointment = () => {
             }}
                 className='mb-4 mt-4'
             >Appointment List</h4>
-                {appoinment_list.map((entry, index) => (
+                {appoinmentList.map((entry, index) => (
                     <div
                         className='doctor-appoinment-card'
-                        onClick={() => router.push(`/doctor-appointment/detail/${entry.predictionId}`)}
+                        onClick={() => router.push(`/doctor-appointment/detail/${entry.appointment.predictionid}`)}
                     >
                         <div key={index}
                             className="d-flex docter-card"
@@ -77,12 +123,12 @@ const DoctorAppointment = () => {
                                             fontSize:"18px",
                                             fontWeight:"600"
                                         }}
-                                    >{entry.name}</p>
-                                    <p className='mt-0 mb-0'>{entry.age} y.o, {entry.sex}</p>
+                                    >{entry.user.name}</p>
+                                    <p className='mt-0 mb-0'>{entry.user.age} y.o, {entry.user.sex}</p>
                                 </div>
                                 <div>
                                     {
-                                        entry.status == "rejected" ?
+                                        entry.appointment.status == "rejected" ?
                                         <Button
                                         className='mt-3 mb-2'
                                         style={{
@@ -90,14 +136,16 @@ const DoctorAppointment = () => {
                                             border: '1px solid #DC2228',
                                             maxWidth:'250px'
                                         }}
+                                        onClick={(e) => rejectAppointment(e, entry.appointment.id)}
                                         >Reject</Button>
-                                        : entry.status == "accepted" ?
+                                        : entry.appointment.status == "accepted" ?
                                         <Button
                                         style={{
                                             backgroundColor: "#DC2228",
                                             border: '1px solid #DC2228',
                                             maxWidth:'250px'
                                         }}
+                                        onClick={(e) => acceptAppointment(e, entry.appointment.id)}
                                         >Accept</Button> :
                                         <div>
                                             <Button
@@ -107,6 +155,7 @@ const DoctorAppointment = () => {
                                                 border: '1px solid #DC2228',
                                                 maxWidth:'250px'
                                             }}
+                                            onClick={(e) => rejectAppointment(e, entry.appointment.id)}
                                             >Reject</Button>
                                             <Button
                                             style={{
@@ -114,6 +163,7 @@ const DoctorAppointment = () => {
                                                 border: '1px solid #299644',
                                                 maxWidth:'250px'
                                             }}
+                                            onClick={(e) => acceptAppointment(e, entry.appointment.id)}
                                             >Accept</Button>
                                         </div>
                                     }

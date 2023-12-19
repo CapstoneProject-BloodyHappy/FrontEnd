@@ -17,14 +17,6 @@ const DoctorAppointmentDetail = (props) => {
         }
     }, [props.userdata]);
 
-    const data =
-    {
-        'date':'2023-12-18',
-        'result' : 'Anemia',
-        'name' : 'Arik Rayi',
-        'age' : 20,
-        'sex': 'male'
-    }
 
     const formatDate = (dateString) =>{
         const dateObj = new Date(dateString);
@@ -38,6 +30,29 @@ const DoctorAppointmentDetail = (props) => {
         return formattedDate;
     }
 
+    useEffect(() => {
+        if (id) {
+            fetch(`${process.env.API_URL}/predict/${id}`, {
+                headers: {
+                    'Authorization': getCookie('token'),
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+                if (res.status === 401) {
+                    router.push('/login');
+                }
+                else {
+                    alert('Error fetching profile');
+                }
+            }).then((data) => {
+                setDetails(data)
+            }
+            );
+        }
+    }, [id]);
+
     return (
         <Container className="mt-3">
             <div className="d-flex">
@@ -50,7 +65,7 @@ const DoctorAppointmentDetail = (props) => {
                         fontWeight:'600'
                     }}
                         className='mb-5'
-                    >{formatDate(data.date)}</h3>
+                    >{formatDate(details.date)}</h3>
                 </div>
 
                 <div
@@ -77,7 +92,7 @@ const DoctorAppointmentDetail = (props) => {
                                 }}
                                 className="mt-3"
                             >
-                                <img src="default-avatar.jpg"
+                                <img src={details.photoUrl}
                                 style={{
                                     width:"100%",
                                     height:"100%",
@@ -107,20 +122,25 @@ const DoctorAppointmentDetail = (props) => {
                                     fontWeight:"600"
                                 }}
                             >
-                                Identifikasi Pasien
+                                Prediksi
+                            </p>
+                            <p
+                                className='mt-1'
+                            >
+                                {details.result}
                             </p>
                             <ul>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Name</span>
-                                : {data.name}
+                                : {details.name}
                             </li>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Age</span>
-                                : {data.age}
+                                : {details.age}
                             </li>
                             <li>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Sex</span>
-                                : {data.sex}
+                                : {details.sex}
                             </li>
                             </ul>
 
@@ -136,7 +156,7 @@ const DoctorAppointmentDetail = (props) => {
                             <p
                                 className='mt-1'
                             >
-                                {data.result}
+                                {details.result}
                             </p>
                         </div>
                 </div>

@@ -65,7 +65,7 @@ const PredictPage = () => {
     }
 
     const lookForDoctor = () => {
-        router.push(`/loading/${predictionId}`)
+        router.push(`/doctor-list/${predictionId}`)
     }
 
 
