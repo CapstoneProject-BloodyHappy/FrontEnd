@@ -88,16 +88,6 @@ const History = () => {
                         </div>
                     </div>
                 ))}
-
-                    <Button variant="outline-danger"
-                        style={{
-                            marginLeft:'12px',
-                            marginTop:'20px',
-                            fontWeight:'700'
-                        }}
-                    >
-                        Clear History
-                    </Button>
             </Row>
         </Container>
     );
