@@ -70,14 +70,14 @@ const LoginPage = () => {
                     }}
                 >
                     <div style={{
-                        width:"30px",
-                        height:"30px",
+                        width:"40px",
+                        height:"40px",
                         backgroundColor:"#9e181c",
                         borderRadius: "50%"
                     }}></div>
                     <div style={{
-                        width:"30px",
-                        height:"30px",
+                        width:"40px",
+                        height:"40px",
                         backgroundColor:"#9e181c",
                         borderRadius: "50%"
                     }}></div>
