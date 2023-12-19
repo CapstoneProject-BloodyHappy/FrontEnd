@@ -2,6 +2,7 @@
 import '../styles/globals.css'
 import '../styles/login/styles.css'
 import '../styles/chat/livechat.css'
+import '../styles/loading/styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
