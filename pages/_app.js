@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getApps, initializeApp } from "firebase/app";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import useAuth from '../src/libs/useAuth';
@@ -35,6 +35,7 @@ if (getApps().length < 1) {
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const auth = useAuth();
+  const [userData, setUserData] = useState(null);
 
   const checkProfile = async () => {
     await fetch(`${process.env.API_URL}/profile`, {
@@ -42,11 +43,18 @@ function MyApp({ Component, pageProps }) {
         'Authorization': getCookie('token'),
       },
     }).then((res) => {
-      console.log(res);
       if (res.status === 200) {
-        res.json().then(() => {
+        res.json().then((data) => {
+          setUserData(data);
+          if (data.role === 'doctor') {
+            router.push('/chat');
+          }
           if (router.pathname === '/login') {
-            router.push('/history');
+            if (data.role === 'user') {
+              router.push('/history');
+            } else if (data.role === 'doctor') {
+              router.push('/chat');
+            }
           }
         });
       } else if (res.status === 401) {
@@ -74,8 +82,8 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Bottom_Navbar />
-      <Component {...pageProps} />
+      <Bottom_Navbar userdata={userData}/>
+      <Component {...pageProps } userdata={userData}/>
     </>
   );
 }

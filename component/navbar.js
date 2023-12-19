@@ -1,17 +1,20 @@
-import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import useAuth from '../src/libs/useAuth';
-import { useCookies } from 'react-cookie';
-import { useEffect } from 'react';
 import Link from 'next/link'
 
-const Bottom_Navbar = () => {
+const Bottom_Navbar = (props) => {
     const auth = useAuth();
+    const [userData, setUserData] = React.useState(null);
 
+    useEffect(() => {
+        if (props.userdata) {
+            setUserData(props.userdata);
+        }
+    }, [props.userdata]);
     
     return (
         <Navbar expand="lg" className="navbar-custom"  sticky="bottom" fixed="top"
@@ -25,7 +28,7 @@ const Bottom_Navbar = () => {
             ><Link href="/">Bloody Happy</Link></div>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                { (auth.user) &&
+                { (auth.user && userData && userData.role === 'user') &&
                     <Nav className="me-auto">
                         <Nav.Link><Link href="/history">History</Link></Nav.Link>
                         <Nav.Link><Link href="/chat">Chat</Link></Nav.Link>
