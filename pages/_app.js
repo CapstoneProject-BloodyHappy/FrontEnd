@@ -77,6 +77,9 @@ function MyApp({ Component, pageProps }) {
   }
 
   useEffect(() => {
+    if (getCookie('token') === undefined) {
+      setLoading(false);
+    }
     if (getCookie('token') === undefined && router.pathname !== '/login') {
       router.push('/login');
     } else if (getCookie('token') !== undefined && router.pathname !== '/profile/new') {

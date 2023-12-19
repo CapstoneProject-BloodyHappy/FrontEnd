@@ -27,6 +27,7 @@ const useAuth = () => {
     try {
       await signOut(auth);
       deleteCookie('token');
+      deleteCookie('user');
       setUser(null);
       router.push('/login');
     } catch (error) {
