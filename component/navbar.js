@@ -22,7 +22,7 @@ const Bottom_Navbar = () => {
             <Container>
             <div
                 className='navbar-brand-custom'
-            ><Link href="/predict">Bloody Happy</Link></div>
+            ><Link href="/">Bloody Happy</Link></div>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 { (auth.user) &&
