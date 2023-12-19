@@ -22,14 +22,14 @@ const Bottom_Navbar = () => {
             <Container>
             <div
                 className='navbar-brand-custom'
-            >Bloody Happy</div>
+            ><Link href="/">Bloody Happy</Link></div>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 { (auth.user) &&
                     <Nav className="me-auto">
                         <Nav.Link><Link href="/history">History</Link></Nav.Link>
-                        <Nav.Link><Link href="/profile">Profile</Link></Nav.Link>
                         <Nav.Link><Link href="/chat">Chat</Link></Nav.Link>
+                        <Nav.Link><Link href="/profile">Profile</Link></Nav.Link>
                     </Nav>
                 }
             </Navbar.Collapse>
