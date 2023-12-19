@@ -60,14 +60,17 @@ const History = () => {
                     >
                         <div
                             style={{
-                                width:"70px",
-                                maxWidth:"70px"
+                                width:"100px",
+                                height:"100px",
+                                maxWidth:"100px",
+                                marginRight: '10px'
                             }}
                         >
                             <img src={entry.photoUrl} 
                                 style={{
                                     width:"100%",
-                                    borderRadius:"10px"
+                                    height:"100%",
+                                    borderRadius:"10px",
                                 }}
                             />
                         </div>

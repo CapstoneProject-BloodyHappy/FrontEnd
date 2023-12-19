@@ -54,7 +54,8 @@ a {
   border:1px solid #DC2228;
   border-radius:10px;
   margin-left:12px;
-  height:70px
+  height:max-content;
+  padding:10px
 }
 
 .history-card:hover{
