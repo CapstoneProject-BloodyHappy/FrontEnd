@@ -15,7 +15,6 @@ const useAuth = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
-      console.log(await result.user.getIdToken());
       setCookie('user', result.user)
       setCookie('token', await result.user.getIdToken());
       router.push('/');
