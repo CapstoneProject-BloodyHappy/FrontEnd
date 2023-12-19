@@ -58,6 +58,7 @@ function MyApp({ Component, pageProps }) {
           }
         });
       } else if (res.status === 401) {
+        auth.handleSignOut();
         router.push('/login');
       } else if (res.status === 403) {
         router.push('/profile/new');
