@@ -1,19 +1,64 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useRouter } from 'next/router'
 import { Container, Row, Col, Image, Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faTrashCan, faArrowRight} from '@fortawesome/free-solid-svg-icons';
+import { getCookie } from 'cookies-next';
+import axios from 'axios';
 
 const PredictPage = () => {
     const router = useRouter();
 
+    const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
+    const [filePreview, setFilePreview] = useState(null);
     const [filename, setFileName] = useState('No Selected File');
     const [resultVisibility, setResultVisibility] = useState(false);
+    const [result, setResult] = useState(null);
+
+    const onFileChange = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            const filePreview = URL.createObjectURL(file);
+            setFilePreview(filePreview);
+            setImage(file);
+            setFileName(file.name);
+        }
+    }
 
     const predict = () => {
-        setResultVisibility(true);
+        const formData = new FormData();
+        if (image) {
+            formData.append('file', image);
+        }
+        console.log('FormData:', formData);
+        setLoading(true);
+        fetch(`${process.env.API_URL}/predict`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': getCookie('token'),
+            }
+        })
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            } else {
+                alert('Error predicting');
+            }
+        }).then(data => {
+            setResult(data.result);
+        });
     }
+
+    useEffect(() => {
+        if (result !== null) {
+            setResultVisibility(true);
+            setLoading(false);
+        }
+    }, [result, loading]);
+
+
 
     const History = () => {
         router.push('/history')
@@ -28,21 +73,16 @@ const PredictPage = () => {
                 }}
             >Unlock the secrets of your health through your eyes</p>
             <p className='mt-0 mb-1'>Simply upload an image and let Bloody Happy reveal insights with a glance</p>
-            <Form.Group controlId="formFile" className="mb-3 image-input"
+            <Form.Group controlId="formFile"className="mb-3 image-input"
                 onClick={()=> document.querySelector(".input-field").click()}
             >
                 <Form.Control type="file" hidden className='input-field'
-                    onChange={({target: {files}})=>{
-                        files[0] && setFileName(files[0].name)
-                        if(files){
-                            setImage(URL.createObjectURL(files[0]));
-                        }
-                    }}
+                    onChange={onFileChange}
                 />
 
                 {
                     image ? 
-                    <img src={image} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} alt={filename}/> :
+                    <img src={filePreview} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} alt={filename}/> :
                     <div className='d-flex flex-column'>
                         <FontAwesomeIcon icon={faImage} style={{color: "#DC2228",width:"100px", height:"100px"}} />
                         <Form.Label>Select Image</Form.Label>
@@ -72,7 +112,12 @@ const PredictPage = () => {
                             backgroundColor: "#DC2228",
                             border: '1px solid #DC2228'
                         }}>Predict</Button>
-
+                        { 
+                            loading && 
+                                <div className='mt-5 d-flex flex-column align-items-center'>
+                                    <p>Loading...</p> 
+                                </div>
+                        }
                         {
                             resultVisibility && (
                                 <div className='mt-5 d-flex flex-column align-items-center'>
@@ -81,7 +126,7 @@ const PredictPage = () => {
                                             style={{
                                                 fontWeight:"600"
                                             }}
-                                        >Prediction</span> : Anemia
+                                        >Prediction</span> : {result}
                                     </div>
 
                                     <Button
