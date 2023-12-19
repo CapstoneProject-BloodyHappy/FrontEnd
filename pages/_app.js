@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const auth = useAuth();
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const checkProfile = async () => {
     await fetch(`${process.env.API_URL}/profile`, {
