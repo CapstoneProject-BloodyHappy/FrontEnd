@@ -33,6 +33,7 @@ if (getApps().length < 1) {
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  const auth = getAuth();
 
   const checkProfile = async () => {
     await fetch(`${process.env.API_URL}/profile`, {
@@ -53,10 +54,12 @@ function MyApp({ Component, pageProps }) {
         router.push('/profile/new');
       } else {
         alert('API Error');
+        auth.handleSignOut();
       }
     }).catch((err) => {
       console.error(err);
       alert('API Error');
+      auth.handleSignOut();
     });
   }
 
