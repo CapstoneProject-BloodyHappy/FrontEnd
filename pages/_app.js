@@ -51,7 +51,12 @@ function MyApp({ Component, pageProps }) {
         router.push('/login');
       } else if (res.status === 403) {
         router.push('/profile/new');
+      } else {
+        alert('API Error');
       }
+    }).catch((err) => {
+      console.error(err);
+      alert('API Error');
     });
   }
 
