@@ -16,6 +16,7 @@ import Bottom_Navbar from '../component/navbar';
 
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import Loading from '../component/loading';
 config.autoAddCss = false
 
 const firebaseConfig = {
@@ -36,6 +37,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const auth = useAuth();
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const checkProfile = async () => {
     await fetch(`${process.env.API_URL}/profile`, {
@@ -56,6 +58,7 @@ function MyApp({ Component, pageProps }) {
               router.push('/chat');
             }
           }
+          setLoading(false);
         });
       } else if (res.status === 401) {
         auth.handleSignOut();
@@ -77,6 +80,7 @@ function MyApp({ Component, pageProps }) {
     if (getCookie('token') === undefined && router.pathname !== '/login') {
       router.push('/login');
     } else if (getCookie('token') !== undefined && router.pathname !== '/profile/new') {
+      setLoading(true);
       checkProfile();
     }
   }, [router.pathname]);
@@ -84,6 +88,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Bottom_Navbar userdata={userData}/>
+      {loading && <Loading />}
       <Component {...pageProps } userdata={userData}/>
     </>
   );
