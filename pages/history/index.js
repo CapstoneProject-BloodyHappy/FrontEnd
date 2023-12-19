@@ -28,6 +28,22 @@ const History = () => {
             'Date':'2023-12-18',
             'Result' : 'Non Anemia'
         },
+        {
+            'Date':'2023-12-18',
+            'Result' : 'Anemia'
+        },
+        {
+            'Date':'2023-12-18',
+            'Result' : 'Non Anemia'
+        },
+                {
+            'Date':'2023-12-18',
+            'Result' : 'Anemia'
+        },
+        {
+            'Date':'2023-12-18',
+            'Result' : 'Non Anemia'
+        },
     ]
 
     const formatDate = (dateString) =>{
@@ -44,19 +60,12 @@ const History = () => {
                 <h3 style={{
                     fontWeight:'600'
                 }}
-                    className='mb-5'
+                    className='mb-4 mt-2'
                 >History</h3>
 
                 {history_data.map((entry, index) => (
                     <div key={index} 
-                        style={{ 
-                            marginBottom: '20px',
-                            border:'1px solid #DC2228',
-                            borderRadius:'10px',
-                            marginLeft:'12px',
-                            height:'70px'
-                        }}
-                        className="d-flex"
+                        className="d-flex history-card"
                         onClick={() => router.push('/history/detail')}
                     >
                         <div

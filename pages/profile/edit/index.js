@@ -7,6 +7,8 @@ const ProfilePage = () => {
     const [age, setAge] = useState('');
     const [sex, setSex] = useState('');
 
+    const [isValidEmail, setIsValidEmail] = useState(true);
+
     const handleNameChange = (e) => {
         setName(e.target.value);
     };
@@ -23,6 +25,17 @@ const ProfilePage = () => {
         setSex(e.target.value);
     };
 
+    const handleAgeKeyDown = (event) => {
+
+        if (event.key === 'Tab' || event.key === 'Backspace' || event.key === 'Delete') {
+            return;
+        }
+
+        if (!/^[0-9]+$/.test(event.key)) {
+            event.preventDefault();
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // Perform form submission logic here
@@ -30,12 +43,10 @@ const ProfilePage = () => {
 
     return (
         <Container>
-            <Row className="justify-content-center">
-                <Col xs={6} md={4}>
-                    <Image src="/default-avatar.jpg" roundedCircle width={400} />
-                </Col>
-            </Row>
-            <Row className="justify-content-center mt-4">
+            <div className="d-flex flex-column align-items-center image-container">
+                <Image src="/default-avatar.jpg" roundedCircle className='profile-img' />
+            </div>
+            <Row className="justify-content-center mt-2">
                 <Col xs={12} md={8}>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formName">
@@ -48,7 +59,7 @@ const ProfilePage = () => {
                         </Form.Group>
                         <Form.Group controlId="formAge">
                             <Form.Label>Age</Form.Label>
-                            <Form.Control type="number" value={age} onChange={handleAgeChange} />
+                            <Form.Control type="number" value={age} onKeyDown={handleAgeKeyDown} onChange={handleAgeChange} />
                         </Form.Group>
                         <Form.Group controlId="formSex">
                             <Form.Label>Sex</Form.Label>
@@ -57,7 +68,7 @@ const ProfilePage = () => {
                                 <option value="female">Female</option>
                             </Form.Control>
                         </Form.Group>
-                        <Button variant="primary" type="submit">Save Changes</Button>
+                        <Button variant="primary" type="submit" className='mt-4'>Save Changes</Button>
                     </Form>
                 </Col>
             </Row>

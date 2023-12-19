@@ -4,17 +4,20 @@ import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 
 const ProfilePage = () => {
     const router = useRouter();
+
+    const userData ={
+        'name' : 'Arik Rayi',
+        'email' : 'arik@gmail.com'
+    }
     return (
         <Container>
-            <Row className="justify-content-center">
-                <Col xs={6} md={4}>
-                    <Image src="/default-avatar.jpg" roundedCircle width={400} />
-                </Col>
-            </Row>
+            <div className="d-flex flex-column align-items-center image-container">
+                <Image src="/default-avatar.jpg" roundedCircle className='profile-img' />
+                    <h2>{userData.name}</h2>
+                    <p>{userData.email}</p>
+            </div>
             <Row className="justify-content-center mt-4">
                 <Col xs={12} md={8}>
-                    <h2>Name</h2>
-                    <p>Email: example@example.com</p>
                     <p>Age: 25</p>
                     <p>Sex: Male</p>
                 </Col>

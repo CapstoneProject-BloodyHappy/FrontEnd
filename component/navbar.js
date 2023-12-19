@@ -14,13 +14,15 @@ const Bottom_Navbar = () => {
 
     
     return (
-        <Navbar expand="lg" className="bg-body-tertiary"  sticky="bottom"
+        <Navbar expand="lg" className="navbar-custom"  sticky="bottom" fixed="top"
             style={{
                 width:"100%",
             }}
         >
             <Container>
-            <Navbar.Brand>Bloody Happy</Navbar.Brand>
+            <div
+                className='navbar-brand-custom'
+            >Bloody Happy</div>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 { (auth.user) &&
@@ -33,7 +35,7 @@ const Bottom_Navbar = () => {
             { (auth.user) &&
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
-                        <Button variant="outline-danger" onClick={() => auth.handleSignOut()}>Logout</Button>
+                        <Button variant="outline-light" onClick={() => auth.handleSignOut()}>Logout</Button>
                     </Navbar.Text>
                 </Navbar.Collapse>
             }
