@@ -6,10 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getApps, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { useEffect } from 'react';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
+import useAuth from '../src/libs/useAuth';
 
 import Bottom_Navbar from '../component/navbar';
 
@@ -33,7 +33,7 @@ if (getApps().length < 1) {
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const auth = getAuth();
+  const auth = useAuth();
 
   const checkProfile = async () => {
     await fetch(`${process.env.API_URL}/profile`, {
