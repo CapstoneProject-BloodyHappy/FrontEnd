@@ -1,6 +1,7 @@
 // pages/_app.js
 import '../styles/globals.css'
 import '../styles/login/styles.css'
+import '../styles/chat/livechat.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -11,6 +12,10 @@ import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 
 import Bottom_Navbar from '../component/navbar';
+
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_APIKEY,

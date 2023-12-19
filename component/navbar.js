@@ -29,6 +29,7 @@ const Bottom_Navbar = () => {
                     <Nav className="me-auto">
                         <Nav.Link><Link href="/history">History</Link></Nav.Link>
                         <Nav.Link><Link href="/profile">Profile</Link></Nav.Link>
+                        <Nav.Link><Link href="/chat">Chat</Link></Nav.Link>
                     </Nav>
                 }
             </Navbar.Collapse>
