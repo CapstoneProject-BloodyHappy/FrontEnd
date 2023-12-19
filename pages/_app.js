@@ -34,11 +34,32 @@ if (getApps().length < 1) {
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
+  const checkProfile = async () => {
+    await fetch(`${process.env.API_URL}/profile`, {
+      headers: {
+        'Authorization': getCookie('token'),
+      },
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        res.json().then(() => {
+          if (router.pathname === '/login') {
+            router.push('/history');
+          }
+        });
+      } else if (res.status === 401) {
+        router.push('/login');
+      } else if (res.status === 403) {
+        router.push('/profile/new');
+      }
+    });
+  }
+
   useEffect(() => {
     if (getCookie('token') === undefined && router.pathname !== '/login') {
       router.push('/login');
-    } else if (getCookie('token') !== undefined && router.pathname === '/login') {
-      router.push('/history');
+    } else if (getCookie('token') !== undefined && router.pathname !== '/profile/new') {
+      checkProfile();
     }
   }, [router.pathname]);
 

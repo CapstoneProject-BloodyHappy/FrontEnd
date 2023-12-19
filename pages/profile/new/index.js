@@ -1,43 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Image, Button, Form } from 'react-bootstrap';
-import { useRouter } from 'next/router';
 import { getCookie } from 'cookies-next';
-
-import useAuth from '../../../src/libs/useAuth';
+import { useRouter } from 'next/router';
 
 const ProfilePage = () => {
-    const router = useRouter();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
     const [age, setAge] = useState('');
     const [sex, setSex] = useState('');
-    const [photoURL, setPhotoURL] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [photoUrl, setPhotoUrl] = useState('');
+    const router = useRouter();
 
-    useEffect(() => {
-        const user = JSON.parse(getCookie('user'));
-        setPhotoURL(user.photoURL);
-        setEmail(user.email);
-
-        fetch(`${process.env.API_URL}/profile`, {
-            headers: {
-                'Authorization': getCookie('token'),
-            }
-        }).then((res) => {
-            if (res.status === 200) {
-                return res.json();
-            } else {
-                alert('Error fetching profile');
-            }
-        }).then((user) => {
-            setName(user.name);
-            setAge(user.age);
-            setSex(user.sex);
-        });
-    }, []);
-
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-    };
+    const [isValidEmail, setIsValidEmail] = useState(true);
 
     const handleAgeChange = (e) => {
         setAge(e.target.value);
@@ -64,8 +38,8 @@ const ProfilePage = () => {
             alert('Please fill in all fields');
             return;
         }
-        fetch(`${process.env.API_URL}/profile`, {
-            method: 'PUT',
+        fetch(`${process.env.API_URL}/create-user`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': getCookie('token'),
@@ -78,28 +52,38 @@ const ProfilePage = () => {
         })}).then((res) => {
             if (res.status === 200) {
                 res.json().then(() => {
-                    router.push('/profile');
+                    router.push('/history');
                 });
             } else {
-                alert('Error editing user');
+                alert('Error creating user');
             }
         }).catch((err) => {
             console.error(err);
-            alert('Error editing user');
+            alert('Error creating user');
         })
     };
 
+    useEffect(() => {
+        const user = JSON.parse(getCookie('user'));
+        setName(user.displayName);
+        setEmail(user.email);
+        setPhotoUrl(user.photoURL);
+    }
+    , [name, email, photoUrl]);
+
     return (
         <Container>
+            <h1 className="text-center mt-3">Welcome new user</h1>
+            <h3 className="text-center mt-3">Please fill in your profile first.</h3>
             <div className="d-flex flex-column align-items-center image-container">
-                <Image src={photoURL} roundedCircle className='profile-img' />
+                <Image src={photoUrl} roundedCircle className='profile-img' />
             </div>
             <Row className="justify-content-center mt-2">
                 <Col xs={12} md={8}>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formName">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" value={name} onChange={handleNameChange} />
+                            <Form.Control type="text" value={name} disabled/>
                         </Form.Group>
                         <Form.Group controlId="formEmail">
                             <Form.Label>Email</Form.Label>
@@ -112,8 +96,9 @@ const ProfilePage = () => {
                         <Form.Group controlId="formSex">
                             <Form.Label>Sex</Form.Label>
                             <Form.Control as="select" value={sex} onChange={handleSexChange}>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="">Choose Sex</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit" className='mt-4'>Save Changes</Button>

@@ -15,7 +15,9 @@ const useAuth = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
-      setCookie('token', result.user.accessToken);
+      console.log(await result.user.getIdToken());
+      setCookie('user', result.user)
+      setCookie('token', await result.user.getIdToken());
       router.push('/');
     } catch (error) {
       console.error('Google Sign-In Error:', error.message);
