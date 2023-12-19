@@ -56,7 +56,7 @@ const History = () => {
                 {historyData.map((entry, index) => (
                     <div key={index} 
                         className="d-flex history-card"
-                        onClick={() => router.push('/history/detail')}
+                        onClick={() => router.push(`/history/detail/${entry.id}`)}
                     >
                         <div
                             style={{

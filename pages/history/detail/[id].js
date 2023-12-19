@@ -1,17 +1,15 @@
-import Head from 'next/head';
 import React from 'react';
 import { Container, Row, Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
-// import BloodCell from "../../public/blood_cell.png"
+import { getCookie } from 'cookies-next';
 
 const Detail = () => {
     const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const { id } = router.query;
+    const [details, setDetails] = useState([]);
 
-    const history_data =
+    const user_data =
         {
             'Date':'2023-12-18',
             'Result' : 'Anemia',
@@ -21,13 +19,37 @@ const Detail = () => {
         }
 
     const formatDate = (dateString) =>{
-        const date = new Date(dateString);
-        const options = { day: 'numeric', month: 'short', year: 'numeric' };
-        const formattedDate = date.toLocaleDateString('en-US', options);
+        const dateObj = new Date(dateString);
+
+        const day = dateObj.getUTCDate().toString().padStart(2, '0');
+        const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0');
+        const year = dateObj.getUTCFullYear();
+
+        const formattedDate = `${day}-${month}-${year}`;
 
         return formattedDate;
     }
 
+    useEffect(() => {
+        fetch(`${process.env.API_URL}/predict/${id}`, {
+            headers: {
+                'Authorization': getCookie('token'),
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            if (res.status === 401) {
+                router.push('/login');
+            }
+            else {
+                alert('Error fetching profile');
+            }
+        }).then((data) => {
+            setDetails(data)
+        }
+        );
+    }, []);
     return (
         <Container className="mt-3">
             <div className="d-flex">
@@ -40,7 +62,7 @@ const Detail = () => {
                         fontWeight:'600'
                     }}
                         className='mb-5'
-                    >{formatDate(history_data.Date)}</h3>
+                    >{formatDate(details.date)}</h3>
                 </div>
 
                 <div
@@ -67,7 +89,13 @@ const Detail = () => {
                                 }}
                                 className="mt-3"
                             >
-                                Image
+                                <img src={details.photoUrl} 
+                                style={{
+                                    width:"100%",
+                                    height:"100%",
+                                    borderRadius:"10px",
+                                }}
+                            />
                             </div>
                             <p
                                 style={{
@@ -96,15 +124,15 @@ const Detail = () => {
                             <ul>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Name</span>
-                                : {history_data.Name}
+                                : {user_data.Name}
                             </li>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Age</span>
-                                : {history_data.Age}
+                                : {user_data.Age}
                             </li>
                             <li>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Sex</span>
-                                : {history_data.Sex}
+                                : {user_data.Sex}
                             </li>
                             </ul>
 
@@ -120,7 +148,7 @@ const Detail = () => {
                             <p
                                 className='mt-1'
                             >
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus semper, est maximus congue suscipit, justo lorem finibus tellus, a elementum est risus non risus. Donec et ipsum purus. Sed ut mauris arcu. Vestibulum eu ullamcorper neque. Integer sed ipsum et ex vestibulum porttitor scelerisque dapibus elit. 
+                               {details.result}
                             </p>
 
                             <p
@@ -135,7 +163,7 @@ const Detail = () => {
                             <p
                                 className='mt-1'
                             >
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus semper, est maximus congue suscipit, justo lorem finibus tellus, a elementum est risus non risus. Donec et ipsum purus. Sed ut mauris arcu. Vestibulum eu ullamcorper neque. Integer sed ipsum et ex vestibulum porttitor scelerisque dapibus elit. 
+                                {details.recommendation}
                             </p>
                         </div>
                 </div>
