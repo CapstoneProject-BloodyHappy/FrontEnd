@@ -48,14 +48,14 @@ function MyApp({ Component, pageProps }) {
       if (res.status === 200) {
         res.json().then((data) => {
           setUserData(data);
-          if (data.role === 'doctor') {
-            router.push('/chat');
+          if (data.role === 'doctor' && (router.pathname.indexOf('/doctor-appointment') === -1 && router.pathname !== '/profile')) {
+            router.push('/doctor-appointment');
           }
           if (router.pathname === '/login') {
             if (data.role === 'user') {
               router.push('/history');
             } else if (data.role === 'doctor') {
-              router.push('/chat');
+              router.push('/doctor-appointment');
             }
           }
           setLoading(false);

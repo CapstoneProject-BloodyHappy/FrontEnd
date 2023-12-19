@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { getCookie } from 'cookies-next';
 
-const Detail = (props) => {
+const DoctorAppointmentDetail = (props) => {
+    
     const router = useRouter();
     const { id } = router.query;
     const [details, setDetails] = useState([]);
@@ -16,14 +17,14 @@ const Detail = (props) => {
         }
     }, [props.userdata]);
 
-    const user_data =
-        {
-            'Date':'2023-12-18',
-            'Result' : 'Anemia',
-            'Name' : 'Arik Rayi',
-            'Age' : 20,
-            'Sex': 'male'
-        }
+    const data =
+    {
+        'date':'2023-12-18',
+        'result' : 'Anemia',
+        'name' : 'Arik Rayi',
+        'age' : 20,
+        'sex': 'male'
+    }
 
     const formatDate = (dateString) =>{
         const dateObj = new Date(dateString);
@@ -37,28 +38,6 @@ const Detail = (props) => {
         return formattedDate;
     }
 
-    useEffect(() => {
-        if (id) {
-            fetch(`${process.env.API_URL}/predict/${id}`, {
-                headers: {
-                    'Authorization': getCookie('token'),
-                }
-            }).then((res) => {
-                if (res.status === 200) {
-                    return res.json();
-                }
-                if (res.status === 401) {
-                    router.push('/login');
-                }
-                else {
-                    alert('Error fetching profile');
-                }
-            }).then((data) => {
-                setDetails(data)
-            }
-            );
-        }
-    }, [id]);
     return (
         <Container className="mt-3">
             <div className="d-flex">
@@ -71,7 +50,7 @@ const Detail = (props) => {
                         fontWeight:'600'
                     }}
                         className='mb-5'
-                    >{formatDate(details.date)}</h3>
+                    >{formatDate(data.date)}</h3>
                 </div>
 
                 <div
@@ -98,7 +77,7 @@ const Detail = (props) => {
                                 }}
                                 className="mt-3"
                             >
-                                <img src={details.photoUrl} 
+                                <img src="default-avatar.jpg"
                                 style={{
                                     width:"100%",
                                     height:"100%",
@@ -133,15 +112,15 @@ const Detail = (props) => {
                             <ul>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Name</span>
-                                : {userData.name}
+                                : {data.name}
                             </li>
                             <li style={{ marginBottom: '10px' }}>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Age</span>
-                                : {userData.age}
+                                : {data.age}
                             </li>
                             <li>
                                 <span style={{ display: 'inline-block', width: '80px' }}>Sex</span>
-                                : {userData.sex}
+                                : {data.sex}
                             </li>
                             </ul>
 
@@ -157,28 +136,13 @@ const Detail = (props) => {
                             <p
                                 className='mt-1'
                             >
-                                {details.result}
-                            </p>
-
-                            <p
-                                style={{
-                                    fontSize:"16px",
-                                    fontWeight:"600"
-                                }}
-                                className='mt-3'
-                            >
-                                Rekomendasi Pasien
-                            </p>
-                            <p
-                                className='mt-1'
-                            >
-                                {details.recommendation}
+                                {data.result}
                             </p>
                         </div>
                 </div>
             </div>
         </Container>
     );
-};
+}
 
-export default Detail;
+export default DoctorAppointmentDetail;

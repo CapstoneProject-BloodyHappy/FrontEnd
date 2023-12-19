@@ -59,6 +59,15 @@ a {
   padding:10px
 }
 
+.docter-card{
+  margin-bottom: 20px;
+  border:1px solid #DC2228;
+  border-radius:10px;
+  margin-left:12px;
+  height:max-content;
+  padding:10px
+}
+
 .history-card:hover{
   cursor: pointer;
 }
@@ -70,11 +79,7 @@ a {
   justify-content: center;
 }
 
-.loading-container{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.doctor-container{
   height: 80vh;
 }
 
@@ -92,5 +97,9 @@ a {
 }
 
 .delete-image{
+  cursor: pointer;
+}
+
+.doctor-appoinment-card:hover{
   cursor: pointer;
 }

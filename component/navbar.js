@@ -31,7 +31,7 @@ const Bottom_Navbar = (props) => {
                 { (auth.user && userData && userData.role === 'user') &&
                     <Nav className="me-auto">
                         <Nav.Link><Link href="/history">History</Link></Nav.Link>
-                        <Nav.Link><Link href="/chat">Chat</Link></Nav.Link>
+                        <Nav.Link><Link href="/appoinment">Appoinment</Link></Nav.Link>
                         <Nav.Link><Link href="/profile">Profile</Link></Nav.Link>
                     </Nav>
                 }

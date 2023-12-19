@@ -14,6 +14,7 @@ const PredictPage = () => {
     const [filename, setFileName] = useState('No Selected File');
     const [resultVisibility, setResultVisibility] = useState(false);
     const [result, setResult] = useState(null);
+    const [predictionId, setPredictionId] = useState(null);
 
     const onFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -46,6 +47,7 @@ const PredictPage = () => {
             }
         }).then(data => {
             setResult(data.result);
+            setPredictionId(data.id);
         });
     }
 
@@ -61,6 +63,11 @@ const PredictPage = () => {
     const History = () => {
         router.push('/history')
     }
+
+    const lookForDoctor = () => {
+        router.push(`/loading/${predictionId}`)
+    }
+
 
     return (
         <Container className='predict-container'>
@@ -118,7 +125,7 @@ const PredictPage = () => {
                         }
                         {
                             resultVisibility && (
-                                <div className='mt-5 d-flex flex-column align-items-center'>
+                                <div className='mt-4 d-flex flex-column align-items-center'>
                                     <div>
                                         <span
                                             style={{
@@ -135,6 +142,19 @@ const PredictPage = () => {
                                         border: '1px solid #DC2228',
                                         maxWidth:'120px'
                                     }}>History <FontAwesomeIcon icon={faArrowRight} style={{color: "white",width:"15px", height:"15px", marginLeft:'2px'}}/></Button>
+
+                                    {
+                                        result == "Anemia" && (
+                                            <Button
+                                            className='mt-3 mb-2'
+                                            onClick={lookForDoctor}
+                                            style={{
+                                                backgroundColor: "#DC2228",
+                                                border: '1px solid #DC2228',
+                                                maxWidth:'250px'
+                                            }}>Consult Doctor <FontAwesomeIcon icon={faArrowRight} style={{color: "white",width:"15px", height:"15px", marginLeft:'2px'}}/></Button>
+                                        )
+                                    }
                                 </div>
                             )
                         }
