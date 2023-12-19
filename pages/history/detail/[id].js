@@ -13,7 +13,6 @@ const Detail = (props) => {
     useEffect(() => {
         if (props.userdata) {
             setUserData(props.userdata);
-            console.log(props.userdata);
         }
     }, [props.userdata]);
 

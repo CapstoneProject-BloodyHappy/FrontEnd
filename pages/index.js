@@ -30,7 +30,6 @@ const PredictPage = () => {
         if (image) {
             formData.append('file', image);
         }
-        console.log('FormData:', formData);
         setLoading(true);
         fetch(`${process.env.API_URL}/predict`, {
             method: 'POST',

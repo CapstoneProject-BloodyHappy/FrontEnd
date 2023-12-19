@@ -80,6 +80,9 @@ function MyApp({ Component, pageProps }) {
     if (getCookie('token') === undefined) {
       setLoading(false);
     }
+    if (router.pathname === '/profile/new') {
+      setLoading(false);
+    }
     if (getCookie('token') === undefined && router.pathname !== '/login') {
       router.push('/login');
     } else if (getCookie('token') !== undefined && router.pathname !== '/profile/new') {
