@@ -26,22 +26,15 @@ Before you begin, make sure you have the following installed:
     yarn install
     ```
 
-4. **Initialize the Backend/API**
+3. **Initialize the Backend/API**
 
    - Visit the Backend/API repository at [this link](https://github.com/CapstoneProject-BloodyHappy/API)
    - Initialize the API according to the `README.md`
 
-3. **Create a Firebase project and configure authentication:**
-
-    - Visit the [Firebase Console](https://console.firebase.google.com/).
-    - Create a new project.
-    - Navigate to the "Authentication" section and set up your preferred authentication method (e.g., email/password, Google, etc.).
-    - Obtain your Firebase config by clicking on "Project settings" > "General" > "Your apps" > "Firebase SDK snippet" > "Config."
-
-4. **Set up Firebase configuration:**
+4. **Set up env configuration:**
 
     - Create a new file named `.env` in the project root.
-    - Add your Firebase configuration to the file in the following format along with the API Url:
+    - Add your Firebase configuration from the API initialization to the file in the following format along with the API Url:
 
         ```env
         FIREBASE_CONFIG_APIKEY=
