@@ -1,34 +1,63 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# BloodyHappy FrontEnd
 
-## Getting Started
+## Introduction
 
-First, run the development server:
+This is the BloodyHappy FrontEnd App created with Next.js.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Before you begin, make sure you have the following installed:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Node.js@18.17.0
+- Yarn
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## How to Replicate This Project on Your Local Machine
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+1. **Clone this repository:**
 
-## Learn More
+    ```bash
+    git clone https://github.com/CapstoneProject-BloodyHappy/FrontEnd.git
+    cd FrontEnd
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Install dependencies using Yarn:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    yarn install
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+4. **Initialize the Backend/API**
 
-## Deploy on Vercel
+   - Visit the Backend/API repository at [this link](https://github.com/CapstoneProject-BloodyHappy/API)
+   - Initialize the API according to the `README.md`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Create a Firebase project and configure authentication:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    - Visit the [Firebase Console](https://console.firebase.google.com/).
+    - Create a new project.
+    - Navigate to the "Authentication" section and set up your preferred authentication method (e.g., email/password, Google, etc.).
+    - Obtain your Firebase config by clicking on "Project settings" > "General" > "Your apps" > "Firebase SDK snippet" > "Config."
+
+4. **Set up Firebase configuration:**
+
+    - Create a new file named `.env` in the project root.
+    - Add your Firebase configuration to the file in the following format along with the API Url:
+
+        ```env
+        FIREBASE_CONFIG_APIKEY=
+        FIREBASE_CONFIG_AUTHDOMAIN=
+        FIREBASE_CONFIG_PROJECTID=
+        FIREBASE_CONFIG_STORAGEBUCKET=
+        FIREBASE_CONFIG_MESSAGINGSENDERID=
+        FIREBASE_CONFIG_APPID=
+        FIREBASE_CONFIG_MEASUREMENTID=
+        API_URL=
+        ```
+
+5. **Run the app:**
+
+    ```bash
+    yarn dev
+    ```
+
+    Visit [http://localhost:3000](http://localhost:3000) in your browser to see the app.
