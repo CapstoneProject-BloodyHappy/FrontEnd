@@ -9,5 +9,6 @@ module.exports = {
     FIREBASE_CONFIG_APPID: process.env.FIREBASE_CONFIG_APPID,
     FIREBASE_CONFIG_MEASUREMENTID: process.env.FIREBASE_CONFIG_MEASUREMENTID,
     API_URL: process.env.API_URL,
-  }
+  },
+  output: 'standalone'
 }
